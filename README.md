@@ -72,6 +72,7 @@ Developing MorphoNet has been a significant milestone in my understanding of Dee
 MorphoNet is the result of a rigorous, multi-stage design process. The architecture underwent several complete redesigns to identify the optimal balance between depth and spatial integrity. The final weights submitted represent the peak-performing configuration among dozens of tested iterations. 
 For a comprehensive transparency of the development lifecycle, including architectural shifts and previous version performance, please refer to the primary development environment:
 * **Kaggle Notebook (Version History):** [https://www.kaggle.com/code/adityanagrale86/morphonet/notebook](https://www.kaggle.com/code/adityanagrale86/morphonet/notebook)
+
 Unlike generic image classifiers, MorphoNet was engineered as a **Scientific CNN**. A deliberate decision was made to prioritise the preservation of morphological features (such as tidal tails and spiral arm resolution) over aggressive, purely data-driven optimisation. While accuracy could be inflated through "feature squashing," this model settles at **72.19%** to maintain scientific reliability. Given the inherent noise and historical nature of the Galaxy Zoo 2 dataset, this result represents the empirical limit of morphological classification while preserving the physical truth of the objects.
 
 ---
