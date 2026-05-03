@@ -33,20 +33,17 @@ class MorphoNet(nn.Module):
             nn.BatchNorm2d(256), nn.ReLU(),
             nn.MaxPool2d(2, 2),
             
-            # Block 5: 14 -> 7
+            # Block 5: 14 -> 14 (NO MAXPOOL)
             nn.Conv2d(256, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512), nn.ReLU(),
-            nn.MaxPool2d(2, 2),
             
-            # Block 6: 7 -> 3
+            # Block 6: 14 -> 14 (NO MAXPOOL)
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.BatchNorm2d(512), nn.ReLU(),
-            nn.MaxPool2d(2, 2),
             
-            # Block 7: 3 -> 1
+            # Block 7: 14 -> 14 (NO MAXPOOL)
             nn.Conv2d(512, 1024, kernel_size=3, padding=1),
-            nn.BatchNorm2d(1024), nn.ReLU(),
-            nn.MaxPool2d(2, 2)
+            nn.BatchNorm2d(1024), nn.ReLU()
         )
         
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))

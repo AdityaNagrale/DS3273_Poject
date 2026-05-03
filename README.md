@@ -1,57 +1,58 @@
-# MorphoNet: Automated Galaxy Morphology Classification
+# MorphoNet: A Spatially-Preserved CNN for Automated Galaxy Morphology Classification
 
-This repository contains the **MorphoNet** project—a Deep Learning system designed to automatically classify galaxy images from the Galaxy Zoo 2 dataset into six morphological categories.
-
-## 🌌 Project Overview
-Galaxy morphology classification is essential for understanding the evolution of the universe. With millions of images captured by modern telescopes, manual classification is no longer feasible. MorphoNet provides a high-performance, automated solution using a custom Convolutional Neural Network (CNN) architecture.
-
-### **Classification Task (5-Way)**
-1. **Smooth** (Elliptical)
-2. **Spiral** (Featured/Disk)
-3. **Edge-on Disk**
-4. **Barred Spiral**
-5. **Merger** (Consolidated)
+## Abstract
+MorphoNet is a specialized Deep Learning framework designed for the multi-class morphological classification of galaxies using the Galaxy Zoo 2 dataset. By employing a custom seven-layer convolutional architecture that prioritizes spatial feature preservation, the system effectively distinguishes between complex galactic structures. The implementation further integrates a deterministic "Scientific Heuristic" engine to enhance classification reliability in rare merger events, achieving a final validation accuracy of **72.19%**.
 
 ---
 
-## 🛠️ Technical Implementation
-
-### **1. Custom 7-Layer Architecture**
-Unlike standard models that use aggressive max-pooling (reducing spatial detail), MorphoNet uses a **Spatial Preservation Strategy**:
-* **Depth:** 7 Convolutional Blocks (scaling from 32 to 1024 filters).
-* **Resolution:** Max-pooling is stopped after Layer 4, maintaining a **14x14 spatial grid** for high-level features.
-* **Global Average Pooling (GAP):** Summarizes spatial features at the very end to prevent overfitting and ensure translation invariance.
-
-### **2. Adaptive Scientific Heuristic**
-To address the rarity of galactic mergers, the `predict.py` module includes an **Adaptive Heuristic engine** using `scipy.ndimage`:
-* **Dual-Core Detection:** Scans images for interacting bright cores.
-* **Proximity Logic:** Automatically biases the classification toward "Merger" if two significant, proximate cores are identified, providing a scientific safety net for the CNN.
+## 🌌 Classification Taxonomy
+The system performs a 5-way classification task across the following morphological categories:
+1. **Smooth:** Elliptical systems lacking disk or featured structures.
+2. **Spiral:** Featured systems exhibiting distinct disk components and spiral patterns.
+3. **Edge-on Disk:** Disk-dominated systems viewed from a lateral orientation.
+4. **Barred Spiral:** Spiral galaxies possessing a central linear bar structure.
+5. **Merger:** Interacting systems characterized by tidal tails, dual cores, or significant structural distortion.
 
 ---
 
-## 📈 Results
-* **Final Validation Accuracy:** **72.19%** (Epoch 16)
-* **Performance:** Surpassed standard ResNet-18 baseline (67.95%) on the same dataset.
-* **Feature Localization:** Visualized using "X-Ray" activation mapping, proving the model correctly identifies spiral arms and galactic cores.
+## 🛠️ Technical Methodology
+
+### **1. Spatially-Preserved Convolutional Architecture**
+Traditional CNN architectures (e.g., VGG, ResNet) utilize aggressive pooling operations that often deteriorate fine-grained spatial features. MorphoNet addresses this via a **Spatial Preservation Strategy**:
+* **Resolution Maintenance:** Max-pooling operations are restricted to the initial four convolutional blocks.
+* **Feature Grid:** Blocks 5 through 7 maintain a constant **14×14 spatial resolution**, allowing the network to retain structural integrity for higher-order feature extraction.
+* **Global Average Pooling (GAP):** The final 1024-channel feature map is compressed into a 1×1 vector, ensuring translation invariance while preserving the global context learned in earlier layers.
+
+### **2. Adaptive Heuristic Engine (Dual-Core Detection)**
+To mitigate the challenges associated with class imbalance and the visual subtlety of galactic mergers, `predict.py` implements a hybrid logic engine:
+* **Interacting Peak Analysis:** Utilizing `scipy.ndimage`, the system performs adaptive thresholding and binary opening to isolate high-intensity galactic cores.
+* **Proximity Logic:** If multiple significant centroids are detected within a defined interaction radius (0.07–0.7 of image width), the system provides a scientific bias toward the "Merger" class, specifically in cases of CNN predictive uncertainty.
 
 ---
 
-## 📂 Repository Structure
-* **`project_aditya_nagrale/`**: Official submission folder.
-    * `model.py`: MorphoNet architecture.
-    * `predict.py`: Hybrid CNN + Heuristic predictor.
-    * `interface.py`: Standardized grading interface.
-    * `checkpoints/`: Optimized model weights (`final_weights.pth`).
-    * `data/`: 60 sample images for verification.
-* **`main.py`**: Streamlit-based interactive UI.
-* **`temp.py`**: Model visualization and diagnostic toolkit.
-
-## 🚀 How to Run
-1. Install dependencies: `pip install torch torchvision streamlit scipy matplotlib pillow pandas`
-2. Run the interactive UI: `streamlit run main.py`
-3. For grading: Use `project_aditya_nagrale/interface.py` to call `the_predictor`.
+## 📈 Empirical Results & Analysis
+* **Peak Accuracy:** 72.19% (Consolidated 5-way classification).
+* **Baseline Comparison:** Outperformed the standard ResNet-18 benchmark (67.95%) by approximately 4.2%.
+* **Interpretability:** Model reasoning was verified through Grad-CAM activation mapping and Max-Projection filter analysis, confirming that the network correctly localizes spiral arms and galactic nuclei.
 
 ---
-**Developed by:** Aditya Nagrale  
-**Course:** DS3273 - Image and Video Processing with Deep Learning  
-**Institution:** IISER Pune
+
+## 📂 Repository Organization
+* **`project_aditya_nagrale/`**: Core submission package containing modular implementations for training, inference, and dataset management.
+* **`main.py`**: Streamlit-based interactive dashboard for real-time galactic analysis.
+* **`temp.py`**: Diagnostic suite for generating scientific audit visualizations and heatmaps.
+* **`checkpoints/`**: Optimized weights (`final_weights.pth`) derived from a 30-epoch training cycle on Kaggle.
+
+---
+
+## 🤖 Use of AI
+This project was developed in professional collaboration with **Gemini CLI**, an interactive AI agent. The partnership involved:
+* **Architectural Engineering:** Co-designing the 7-layer spatially-preserved pipeline to prevent feature squashing.
+* **Strategic Optimization:** Pivot from 6-way to 5-way classification and the design of the validation-centric `ReduceLROnPlateau` training logic.
+* **Heuristic Design:** Implementation of the deterministic image-processing safety net for merger detection.
+* **Technical Auditing:** Systematic debugging and refinement of the cross-module prediction interface.
+
+---
+**Lead Developer:** Aditya Nagrale  
+**Academic Institution:** IISER Pune  
+**Course:** DS3273 - Image and Video Processing with Deep Learning
